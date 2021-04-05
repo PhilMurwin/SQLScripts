@@ -28,6 +28,18 @@ SELECT c.query('local-name(.)').value('.','varchar(50)') as 'ElementName',
   FROM @iXML.nodes('root/node()') t(c)
 
 
+--== Get an element value from a node with a particular other element value
+declare @xml xml = '<root>
+  <Properties><id>12345</id><name>Language</name><value>English</value></Properties>
+  <Properties><id>67890</id><name>Node1</name><value>Test</value></Properties>
+</root>'
+
+-- Get Properties node's value element text when name element is a specific value
+select c.value('(Properties[./name/text() = "Language"]/value)[1]','varchar(255)') as Language
+    ,c.value('(Properties[./name/text() = "Node1"]/value)[1]','varchar(255)') as CategoryType
+from @xml.nodes('/root') t(c)
+
+
 --Insert a new attribute
 declare @test xml
 set @test = '
